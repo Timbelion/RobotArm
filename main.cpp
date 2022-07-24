@@ -28,7 +28,7 @@ int motorPositionD = 1500;
 vector<thread> waitingThreads; 
 
 
-int main(){
+int main(int argc, char** argv){
 	if (gpioInitialise() < 0){
 		cout << "Failed to initialise!" << endl;
 	}
@@ -49,19 +49,32 @@ int main(){
 	arm.AddJoint(Joint(MOTOR_C));
 	arm.AddJoint(Joint(MOTOR_D));
 	
-	arm.SetAngle(&arm.joints[1], 180, 2);
-	arm.SetAngle(&arm.joints[2], 225, 2);
-	//arm.SetAngle(&arm.joints[1], 180, 2);
-	//arm.SetAngle(&arm.joints[2], 225, 2);
-	//arm.SetAngle(&arm.joints[3], 225, 2);
-
-	arm.JoinThreads();
+	cout << argc << endl;
 	
-	arm.SetAngle(&arm.joints[1], 135, 4);
-	arm.SetAngle(&arm.joints[2], 135, 4);
-	//arm.SetAngle(&arm.joints[1], 135, 2);
-	//arm.SetAngle(&arm.joints[2], 135, 2);
-	//arm.SetAngle(&arm.joints[3], 135, 2);
+	Arm::Point p1 = {15, 0, 10};
+	Arm::Point p2 = {25, 0, 10};
+	Arm::Point p3 = {25, 0, -10};
+	Arm::Point p4 = {15, 0, -10};
+	Arm::Point p5 = {15, 0, 10};
+	//Arm::Point p2 = {(float)atof(argv[1]), (float)atof(argv[2]), (float)atof(argv[3])};
+	
+	
+	arm.SetPosition(p1, 2);
+	arm.JoinThreads();
+	time_sleep(1);
+	
+	arm.Interpolate(p2, 2);
+	time_sleep(1);
+	arm.Interpolate(p3, 2);
+	time_sleep(1);
+	arm.Interpolate(p4, 2);
+	time_sleep(1);
+	arm.Interpolate(p5, 2);
+	time_sleep(1);
+	
+	arm.SetAngle(&arm.joints[0], 135, 2);
+	arm.SetAngle(&arm.joints[1], 135, 2);
+	arm.SetAngle(&arm.joints[2], 135, 2);
 	
 	arm.JoinThreads();
 	
